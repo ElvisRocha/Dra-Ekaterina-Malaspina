@@ -1,22 +1,25 @@
 
-# Plan: Fix Patient Data Not Populating in FirstTimeForm
+# Plan: Reorder Form Fields in FirstTimeForm
 
-## Problem
+## Overview
 
-The `FirstTimeForm` component initializes its `formData` state using `useState` with `initialData` values. However, `useState` only uses the initial value on the **first render** and ignores subsequent changes to the prop.
+Reorder the first four fields in the FirstTimeForm to match the requested layout.
 
-### Current Flow
+---
 
-1. `BookAppointment` mounts with empty `patientData`
-2. `FirstTimeForm` component is rendered (even if hidden via `isOpen={false}`)
-3. `useState` initializes `formData` with empty `initialData` values
-4. User fills in patient data in Step 2
-5. User confirms booking, `showFirstTimeForm` becomes `true`
-6. `initialData` now has real values, but `formData` state is still empty
+## Current Layout
 
-## Solution
+```text
+Row 1: Nombre Completo 🔒    |  Edad (años)
+Row 2: Número de ID 🔒       |  Teléfono 🔒
+```
 
-Add a `useEffect` hook that updates the form state when `initialData` changes AND when the dialog opens (`isOpen` becomes true). This ensures the locked fields are populated with the correct values.
+## Requested Layout
+
+```text
+Row 1: Nombre Completo 🔒    |  Número de Identificación 🔒
+Row 2: Teléfono 🔒           |  Edad (años)
+```
 
 ---
 
@@ -26,37 +29,47 @@ Add a `useEffect` hook that updates the form state when `initialData` changes AN
 
 ### Changes
 
-1. Import `useEffect` from React (already using `useState`)
-2. Add a `useEffect` that syncs `initialData` to `formData` when the dialog opens
+Reorder the fields within the first two `grid` sections (lines 146-200):
 
-### Code Change
+**Row 1 (lines 146-170):**
+- Keep: Nombre Completo (left)
+- Move: Número de Identificación → right (replacing Edad)
 
-Add after the `useState` declaration (around line 57):
-
-```tsx
-// Sync initialData to formData when dialog opens
-useEffect(() => {
-  if (isOpen) {
-    setFormData(prev => ({
-      ...prev,
-      fullName: initialData.fullName,
-      idNumber: initialData.idNumber,
-      phone: initialData.phone,
-    }));
-  }
-}, [isOpen, initialData.fullName, initialData.idNumber, initialData.phone]);
-```
-
-This ensures that:
-- When `isOpen` becomes `true`, the form updates with the latest `initialData`
-- Only the three locked fields are synchronized (not overwriting other user input)
-- The effect re-runs if any of the initial data values change
+**Row 2 (lines 172-200):**
+- Move: Teléfono → left (replacing Número de Identificación)
+- Move: Edad → right (replacing Teléfono)
 
 ---
 
-## Summary
+## Resulting Structure
 
-| Issue | Fix |
-|-------|-----|
-| `useState` ignores prop updates after initial render | Add `useEffect` to sync when dialog opens |
-| Locked fields show empty values | Populate from `initialData` when `isOpen` becomes true |
+```tsx
+{/* Row 1: Nombre Completo | Número de Identificación */}
+<div className="grid md:grid-cols-2 gap-4">
+  <div>
+    <Label htmlFor="fullName">...</Label>
+    <Input id="fullName" ... disabled />
+  </div>
+  <div>
+    <Label htmlFor="idNumber">...</Label>
+    <Input id="idNumber" ... disabled />
+  </div>
+</div>
+
+{/* Row 2: Teléfono | Edad */}
+<div className="grid md:grid-cols-2 gap-4">
+  <div>
+    <Label htmlFor="phone">...</Label>
+    <Input id="phone" ... disabled />
+  </div>
+  <div>
+    <Label htmlFor="age">...</Label>
+    <Input id="age" type="number" ... />
+  </div>
+</div>
+```
+
+This ensures:
+- All three locked fields (Nombre, ID, Teléfono) remain properly styled with the lock icon
+- The Edad field remains editable
+- Vertical alignment is consistent since fields in the same row will have similar label lengths
