@@ -1,49 +1,53 @@
 
+# Plan: Corregir Hover de Botones en /contacto
 
-# Plan: Actualizar Label y Placeholder del Textarea
+## Problema Identificado
 
-## Resumen
+La clase `btn-gradient` en `src/index.css` usa un pseudo-elemento `::before` que cubre todo el boton en hover con `opacity-100`. El CSS actual solo aplica `z-10` a elementos `span`:
 
-Cambiar el texto del label y placeholder del campo de mensaje en el formulario de contacto para hacerlo mas amigable y centrado en el usuario.
+```css
+.btn-gradient span {
+  @apply relative z-10;
+}
+```
+
+Esto causa que los iconos SVG y textos fuera de `<span>` queden ocultos detras del overlay.
 
 ---
 
-## Cambios a Realizar
+## Solucion
 
-**Archivo:** `src/pages/Contact.tsx`
+Modificar el CSS de `btn-gradient` para que TODOS los hijos directos (iconos y texto) permanezcan visibles sobre el overlay del hover.
 
-### 1. Label del Textarea (Linea 167)
+**Archivo:** `src/index.css`
 
-```tsx
-// Antes
-{language === 'es' ? 'Mensaje' : 'Message'} *
+**Cambio en lineas 178-180:**
 
-// Despues
-{language === 'es' ? '¿En qué podemos ayudarte?' : 'How can we help you?'} *
-```
+```css
+/* Antes */
+.btn-gradient span {
+  @apply relative z-10;
+}
 
-### 2. Placeholder del Textarea (Linea 173)
-
-```tsx
-// Antes
-placeholder={language === 'es' ? 'Cuéntanos cómo podemos ayudarte...' : 'Tell us how we can help you...'}
-
-// Despues
-placeholder={language === 'es' ? 'Cuéntanos tus dudas o lo que necesitas, estamos aquí para ti...' : "Tell us your questions or what you need, we're here for you..."}
+/* Despues - aplicar a todos los hijos directos */
+.btn-gradient > * {
+  @apply relative z-10;
+}
 ```
 
 ---
 
-## Textos Finales
+## Por que funciona
 
-| Elemento | Español | Ingles |
-|----------|---------|--------|
-| Label | ¿En que podemos ayudarte? * | How can we help you? * |
-| Placeholder | Cuentanos tus dudas o lo que necesitas, estamos aqui para ti... | Tell us your questions or what you need, we're here for you... |
+| Selector | Afecta a |
+|----------|----------|
+| `.btn-gradient span` | Solo elementos `<span>` |
+| `.btn-gradient > *` | Todos los hijos directos (iconos SVG, spans, texto) |
+
+Con este cambio, tanto el icono `<Send>` como el icono `<MessageCircle>` y todos los textos quedaran por encima del pseudo-elemento `::before`, manteniendose visibles durante el hover.
 
 ---
 
 ## Archivo Modificado
 
-- `src/pages/Contact.tsx` (2 cambios de texto)
-
+- `src/index.css` (1 cambio de selector CSS)
