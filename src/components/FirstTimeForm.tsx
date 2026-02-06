@@ -189,7 +189,10 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
                 />
               </div>
               <div>
-                <Label htmlFor="age">{t('form.age')}</Label>
+                <Label htmlFor="age" className="flex items-center gap-1">
+                  {t('form.age')}
+                  <span className="h-3 w-3" /> {/* Spacer to match lock icon height */}
+                </Label>
                 <Input
                   id="age"
                   type="number"
