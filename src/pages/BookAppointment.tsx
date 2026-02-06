@@ -8,7 +8,6 @@ import { useToast } from '@/hooks/use-toast';
 
 import BookingNavbar from '@/components/booking/BookingNavbar';
 import StepIndicator from '@/components/booking/StepIndicator';
-import ServiceInfoPanel from '@/components/booking/ServiceInfoPanel';
 import ServiceStep from '@/components/booking/steps/ServiceStep';
 import PatientDataStep from '@/components/booking/steps/PatientDataStep';
 import DateTimeStep from '@/components/booking/steps/DateTimeStep';
@@ -226,33 +225,7 @@ const BookAppointmentContent = () => {
                 )}
               </AnimatePresence>
             </div>
-
-            {/* Right Side Panel - Service Info (Desktop only, Step 1) */}
-            {currentStep === 1 && (
-              <AnimatePresence>
-                {selectedService && (
-                  <div className="hidden xl:block w-80 flex-shrink-0">
-                    <div className="sticky top-24">
-                      <ServiceInfoPanel
-                        service={selectedService}
-                        className="max-h-[calc(100vh-8rem)]"
-                      />
-                    </div>
-                  </div>
-                )}
-              </AnimatePresence>
-            )}
           </div>
-
-          {/* Mobile Service Info Panel (Step 1 only) */}
-          {currentStep === 1 && selectedService && (
-            <div className="xl:hidden mt-6">
-              <ServiceInfoPanel
-                service={selectedService}
-                isMobile
-              />
-            </div>
-          )}
         </div>
       </div>
 
