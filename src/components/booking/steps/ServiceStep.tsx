@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { 
@@ -15,6 +15,7 @@ import {
 } from '@/data/services';
 import { Clock, DollarSign, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import ServiceInfoPanel from '../ServiceInfoPanel';
 
 interface ServiceStepProps {
   selectedService: Service | null;
@@ -50,72 +51,111 @@ const ServiceStep = ({ selectedService, onSelectService, onNext }: ServiceStepPr
         </p>
       </div>
 
-      <Accordion type="single" collapsible className="space-y-3">
-        {categories.map((category) => {
-          const categoryServices = getCategoryServices(category.key);
-          return (
-            <AccordionItem
-              key={category.key}
-              value={category.key}
-              className="border border-border rounded-xl overflow-hidden bg-card"
-            >
-              <AccordionTrigger className="px-4 py-4 hover:no-underline hover:bg-secondary/50 transition-colors">
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">{category.icon}</span>
-                  <span className="font-medium text-foreground">
-                    {t(`cat.${category.key}`)}
-                  </span>
-                  <span className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded-full">
-                    {categoryServices.length}
-                  </span>
+      {/* Main card container with services and info panel inside */}
+      <div className="bg-card rounded-2xl border border-border overflow-hidden">
+        <div className="flex flex-col xl:flex-row">
+          {/* Services accordion section */}
+          <div className="flex-1 p-4 xl:p-6">
+            <Accordion type="single" collapsible className="space-y-3">
+              {categories.map((category) => {
+                const categoryServices = getCategoryServices(category.key);
+                return (
+                  <AccordionItem
+                    key={category.key}
+                    value={category.key}
+                    className="border border-border rounded-xl overflow-hidden bg-background"
+                  >
+                    <AccordionTrigger className="px-4 py-4 hover:no-underline hover:bg-secondary/50 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl">{category.icon}</span>
+                        <span className="font-medium text-foreground">
+                          {t(`cat.${category.key}`)}
+                        </span>
+                        <span className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded-full">
+                          {categoryServices.length}
+                        </span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-4 pb-4">
+                      <div className="space-y-2 mt-2">
+                        {categoryServices.map((service) => {
+                          const isSelected = selectedService?.id === service.id;
+                          return (
+                            <button
+                              key={service.id}
+                              onClick={() => onSelectService(service)}
+                              className={cn(
+                                'w-full p-4 rounded-lg border text-left transition-all',
+                                isSelected
+                                  ? 'border-primary bg-primary/5 ring-1 ring-primary'
+                                  : 'border-border hover:border-primary/50 hover:bg-secondary/30'
+                              )}
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-medium text-foreground text-sm mb-1">
+                                    {language === 'es' ? service.nameEs : service.nameEn}
+                                  </h4>
+                                  <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                                    <span className="flex items-center gap-1">
+                                      <Clock className="w-3 h-3" />
+                                      {service.duration}
+                                    </span>
+                                    <span className="flex items-center gap-1 font-semibold text-primary">
+                                      <DollarSign className="w-3 h-3" />
+                                      {formatPrice(service.price)}
+                                    </span>
+                                  </div>
+                                </div>
+                                {isSelected && (
+                                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                                    <Check className="w-3 h-3 text-primary-foreground" />
+                                  </div>
+                                )}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          </div>
+
+          {/* Service Info Panel - inside the card (Desktop) */}
+          <AnimatePresence>
+            {selectedService && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 'auto' }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.3 }}
+                className="hidden xl:block xl:w-80 border-l border-border bg-blush/50 overflow-hidden"
+              >
+                <div className="p-6 h-full">
+                  <ServiceInfoPanel
+                    service={selectedService}
+                    className="bg-transparent border-0 p-0"
+                  />
                 </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-4 pb-4">
-                <div className="space-y-2 mt-2">
-                  {categoryServices.map((service) => {
-                    const isSelected = selectedService?.id === service.id;
-                    return (
-                      <button
-                        key={service.id}
-                        onClick={() => onSelectService(service)}
-                        className={cn(
-                          'w-full p-4 rounded-lg border text-left transition-all',
-                          isSelected
-                            ? 'border-primary bg-primary/5 ring-1 ring-primary'
-                            : 'border-border hover:border-primary/50 hover:bg-secondary/30'
-                        )}
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-foreground text-sm mb-1">
-                              {language === 'es' ? service.nameEs : service.nameEn}
-                            </h4>
-                            <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {service.duration}
-                              </span>
-                              <span className="flex items-center gap-1 font-semibold text-primary">
-                                <DollarSign className="w-3 h-3" />
-                                {formatPrice(service.price)}
-                              </span>
-                            </div>
-                          </div>
-                          {isSelected && (
-                            <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                              <Check className="w-3 h-3 text-primary-foreground" />
-                            </div>
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
-      </Accordion>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Service Info Panel - inside the card (Mobile) */}
+        {selectedService && (
+          <div className="xl:hidden border-t border-border">
+            <ServiceInfoPanel
+              service={selectedService}
+              isMobile
+              className="rounded-none border-0"
+            />
+          </div>
+        )}
+      </div>
 
       {/* Next Button */}
       <div className="pt-4">
