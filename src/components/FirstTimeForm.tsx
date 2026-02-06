@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Lock } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -55,6 +55,18 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
     lastPapSmear: '',
     familyHistory: '',
   });
+
+  // Sync initialData to formData when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: initialData.fullName,
+        idNumber: initialData.idNumber,
+        phone: initialData.phone,
+      }));
+    }
+  }, [isOpen, initialData.fullName, initialData.idNumber, initialData.phone]);
 
   const updateField = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
