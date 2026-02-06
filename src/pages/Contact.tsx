@@ -100,13 +100,13 @@ const ContactContent = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border h-full"
+              className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border h-full flex flex-col"
             >
               <h2 className="font-display text-2xl text-foreground mb-6">
                 {language === 'es' ? 'Envíanos un Mensaje' : 'Send us a Message'}
               </h2>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5 flex-1 flex flex-col">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">
@@ -178,7 +178,7 @@ const ContactContent = () => {
 
                 <Button 
                   type="submit" 
-                  className="w-full btn-gradient rounded-full"
+                  className="w-full btn-gradient rounded-full mt-auto"
                   disabled={isSubmitting}
                 >
                   <Send className="w-4 h-4 mr-2" />
@@ -196,7 +196,7 @@ const ContactContent = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border h-full"
+              className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border h-full flex flex-col"
             >
               <h2 className="font-display text-2xl text-foreground mb-6">
                 {language === 'es' ? 'Información de Contacto' : 'Contact Information'}
@@ -279,7 +279,7 @@ const ContactContent = () => {
               </div>
 
               {/* WhatsApp CTA */}
-              <div className="mt-8 pt-6 border-t border-border">
+              <div className="mt-auto pt-6 border-t border-border">
                 <p className="text-sm text-muted-foreground mb-4 text-center">
                   {language === 'es' 
                     ? '¿Necesitas una respuesta rápida? ¡Escríbenos por WhatsApp!' 
@@ -289,7 +289,7 @@ const ContactContent = () => {
                   href={whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#25D366] hover:bg-[#22c55e] text-white rounded-full font-medium transition-colors"
+                  className="flex items-center justify-center gap-2 w-full py-3 px-4 btn-gradient rounded-full font-medium transition-colors"
                 >
                   <MessageCircle className="w-5 h-5" />
                   {language === 'es' ? 'Chatear por WhatsApp' : 'Chat on WhatsApp'}
