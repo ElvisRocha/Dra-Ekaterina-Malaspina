@@ -100,7 +100,7 @@ const ContactContent = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border"
+              className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border h-full"
             >
               <h2 className="font-display text-2xl text-foreground mb-6">
                 {language === 'es' ? 'Envíanos un Mensaje' : 'Send us a Message'}
@@ -178,7 +178,7 @@ const ContactContent = () => {
 
                 <Button 
                   type="submit" 
-                  className="w-full btn-gradient"
+                  className="w-full btn-gradient rounded-full"
                   disabled={isSubmitting}
                 >
                   <Send className="w-4 h-4 mr-2" />
@@ -196,7 +196,7 @@ const ContactContent = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border"
+              className="bg-card rounded-2xl p-6 md:p-8 shadow-sm border border-border h-full"
             >
               <h2 className="font-display text-2xl text-foreground mb-6">
                 {language === 'es' ? 'Información de Contacto' : 'Contact Information'}
