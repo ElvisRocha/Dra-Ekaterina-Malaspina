@@ -1,53 +1,184 @@
 
-# Plan: Corregir Hover de Botones en /contacto
+# Plan: Unificar Estilos de Botones en /BookAppointment
 
-## Problema Identificado
+## Resumen
 
-La clase `btn-gradient` en `src/index.css` usa un pseudo-elemento `::before` que cubre todo el boton en hover con `opacity-100`. El CSS actual solo aplica `z-10` a elementos `span`:
+Aplicar los mismos estilos visuales de los botones de /contacto a todos los botones del flujo de agendamiento para mantener consistencia visual.
 
-```css
-.btn-gradient span {
-  @apply relative z-10;
-}
+---
+
+## Diferencias Actuales
+
+| Elemento | /contacto | /BookAppointment |
+|----------|-----------|------------------|
+| Altura | `h-12` (48px) | `size="lg"` (44px) |
+| Bordes | `rounded-full` | `rounded-md` (default) |
+| Botones primarios | `btn-gradient rounded-full` | `btn-gradient` |
+| Botones secundarios | N/A | `variant="outline"` sin rounded-full |
+
+---
+
+## Cambios a Realizar
+
+### 1. ServiceStep.tsx (Lineas 122-129)
+
+**Boton "Siguiente":**
+```tsx
+// Antes
+<Button
+  onClick={onNext}
+  disabled={!selectedService}
+  className="w-full btn-gradient"
+  size="lg"
+>
+
+// Despues
+<Button
+  onClick={onNext}
+  disabled={!selectedService}
+  className="w-full h-12 btn-gradient rounded-full"
+>
 ```
 
-Esto causa que los iconos SVG y textos fuera de `<span>` queden ocultos detras del overlay.
-
 ---
 
-## Solucion
+### 2. PatientDataStep.tsx (Lineas 87-102)
 
-Modificar el CSS de `btn-gradient` para que TODOS los hijos directos (iconos y texto) permanezcan visibles sobre el overlay del hover.
+**Boton "Atras":**
+```tsx
+// Antes
+<Button
+  variant="outline"
+  onClick={onBack}
+  className="flex-1"
+  size="lg"
+>
 
-**Archivo:** `src/index.css`
+// Despues
+<Button
+  variant="outline"
+  onClick={onBack}
+  className="flex-1 h-12 rounded-full"
+>
+```
 
-**Cambio en lineas 178-180:**
+**Boton "Siguiente":**
+```tsx
+// Antes
+<Button
+  onClick={onNext}
+  disabled={!isValid}
+  className="flex-1 btn-gradient"
+  size="lg"
+>
 
-```css
-/* Antes */
-.btn-gradient span {
-  @apply relative z-10;
-}
-
-/* Despues - aplicar a todos los hijos directos */
-.btn-gradient > * {
-  @apply relative z-10;
-}
+// Despues
+<Button
+  onClick={onNext}
+  disabled={!isValid}
+  className="flex-1 h-12 btn-gradient rounded-full"
+>
 ```
 
 ---
 
-## Por que funciona
+### 3. DateTimeStep.tsx (Lineas 109-124)
 
-| Selector | Afecta a |
-|----------|----------|
-| `.btn-gradient span` | Solo elementos `<span>` |
-| `.btn-gradient > *` | Todos los hijos directos (iconos SVG, spans, texto) |
+**Boton "Atras":**
+```tsx
+// Antes
+<Button
+  variant="outline"
+  onClick={onBack}
+  className="flex-1"
+  size="lg"
+>
 
-Con este cambio, tanto el icono `<Send>` como el icono `<MessageCircle>` y todos los textos quedaran por encima del pseudo-elemento `::before`, manteniendose visibles durante el hover.
+// Despues
+<Button
+  variant="outline"
+  onClick={onBack}
+  className="flex-1 h-12 rounded-full"
+>
+```
+
+**Boton "Siguiente":**
+```tsx
+// Antes
+<Button
+  onClick={onNext}
+  disabled={!isValid}
+  className="flex-1 btn-gradient"
+  size="lg"
+>
+
+// Despues
+<Button
+  onClick={onNext}
+  disabled={!isValid}
+  className="flex-1 h-12 btn-gradient rounded-full"
+>
+```
 
 ---
 
-## Archivo Modificado
+### 4. ConfirmStep.tsx (Lineas 133-156)
 
-- `src/index.css` (1 cambio de selector CSS)
+**Boton "Atras":**
+```tsx
+// Antes
+<Button
+  variant="outline"
+  onClick={onBack}
+  className="flex-1"
+  size="lg"
+  disabled={isLoading}
+>
+
+// Despues
+<Button
+  variant="outline"
+  onClick={onBack}
+  className="flex-1 h-12 rounded-full"
+  disabled={isLoading}
+>
+```
+
+**Boton "Confirmar":**
+```tsx
+// Antes
+<Button
+  onClick={onConfirm}
+  className="flex-1 btn-gradient"
+  size="lg"
+  disabled={isLoading}
+>
+
+// Despues
+<Button
+  onClick={onConfirm}
+  className="flex-1 h-12 btn-gradient rounded-full"
+  disabled={isLoading}
+>
+```
+
+---
+
+## Resumen de Cambios
+
+| Archivo | Botones Modificados |
+|---------|---------------------|
+| ServiceStep.tsx | 1 (Siguiente) |
+| PatientDataStep.tsx | 2 (Atras, Siguiente) |
+| DateTimeStep.tsx | 2 (Atras, Siguiente) |
+| ConfirmStep.tsx | 2 (Atras, Confirmar) |
+| **Total** | **7 botones** |
+
+---
+
+## Resultado Visual
+
+- Todos los botones tendran altura uniforme de 48px (`h-12`)
+- Bordes completamente redondeados (`rounded-full`)
+- Botones primarios mantienen el efecto gradient con hover animado
+- Botones secundarios (outline) tendran el mismo estilo de borde redondeado
