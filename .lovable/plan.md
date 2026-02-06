@@ -1,163 +1,62 @@
 
-# Plan: Auto-fill and Disable Patient Data Fields in First Time Form
+# Plan: Fix Patient Data Not Populating in FirstTimeForm
 
-## Overview
+## Problem
 
-Modify the FirstTimeForm component so the three fields already captured during booking (Name, ID, Phone) are pre-filled, disabled, and visually styled to indicate they cannot be edited.
+The `FirstTimeForm` component initializes its `formData` state using `useState` with `initialData` values. However, `useState` only uses the initial value on the **first render** and ignores subsequent changes to the prop.
+
+### Current Flow
+
+1. `BookAppointment` mounts with empty `patientData`
+2. `FirstTimeForm` component is rendered (even if hidden via `isOpen={false}`)
+3. `useState` initializes `formData` with empty `initialData` values
+4. User fills in patient data in Step 2
+5. User confirms booking, `showFirstTimeForm` becomes `true`
+6. `initialData` now has real values, but `formData` state is still empty
+
+## Solution
+
+Add a `useEffect` hook that updates the form state when `initialData` changes AND when the dialog opens (`isOpen` becomes true). This ensures the locked fields are populated with the correct values.
 
 ---
 
-## Current State
-
-The FirstTimeForm component already:
-- Receives `initialData` prop with `fullName`, `idNumber`, and `phone`
-- Pre-fills these values in the form state
-- But all three fields are currently **editable**
-
----
-
-## Changes Required
-
-### File to Modify
+## File to Modify
 
 **`src/components/FirstTimeForm.tsx`**
 
-### 1. Add Translation Keys
+### Changes
 
-**`src/contexts/LanguageContext.tsx`**
+1. Import `useEffect` from React (already using `useState`)
+2. Add a `useEffect` that syncs `initialData` to `formData` when the dialog opens
 
-Add new translation for the locked field tooltip:
+### Code Change
 
-```javascript
-'form.lockedField': { 
-  es: 'Este dato fue proporcionado al agendar su cita', 
-  en: 'This information was provided when booking your appointment' 
-}
-```
-
-### 2. Create Disabled Input Styling
-
-Add a reusable pattern for the three locked fields with:
-- `disabled` attribute on the Input component
-- Visual styling: `bg-gray-100 text-gray-600 cursor-not-allowed`
-- Lock icon (using Lucide `Lock` icon) positioned inside or next to the field
-- Tooltip on hover explaining why the field is locked
-
-### 3. Modify Three Fields
-
-Update the following Input fields to be disabled with the locked style:
-
-**Full Name field (lines 135-141):**
-```tsx
-<div className="relative">
-  <Label htmlFor="fullName">
-    {t('booking.fullName')}
-    <Lock className="inline-block ml-1 h-3 w-3 text-muted-foreground" />
-  </Label>
-  <Input
-    id="fullName"
-    value={formData.fullName}
-    disabled
-    className="mt-1 bg-gray-100 text-gray-600 cursor-not-allowed"
-    title={t('form.lockedField')}
-  />
-</div>
-```
-
-**ID Number field (lines 157-163):**
-```tsx
-<div className="relative">
-  <Label htmlFor="idNumber">
-    {t('booking.id')}
-    <Lock className="inline-block ml-1 h-3 w-3 text-muted-foreground" />
-  </Label>
-  <Input
-    id="idNumber"
-    value={formData.idNumber}
-    disabled
-    className="mt-1 bg-gray-100 text-gray-600 cursor-not-allowed"
-    title={t('form.lockedField')}
-  />
-</div>
-```
-
-**Phone field (lines 165-173):**
-```tsx
-<div className="relative">
-  <Label htmlFor="phone">
-    {t('booking.phone')}
-    <Lock className="inline-block ml-1 h-3 w-3 text-muted-foreground" />
-  </Label>
-  <Input
-    id="phone"
-    type="tel"
-    value={formData.phone}
-    disabled
-    className="mt-1 bg-gray-100 text-gray-600 cursor-not-allowed"
-    title={t('form.lockedField')}
-  />
-</div>
-```
-
-### 4. Import Lock Icon
-
-Add the Lock icon import from Lucide:
+Add after the `useState` declaration (around line 57):
 
 ```tsx
-import { Lock } from 'lucide-react';
+// Sync initialData to formData when dialog opens
+useEffect(() => {
+  if (isOpen) {
+    setFormData(prev => ({
+      ...prev,
+      fullName: initialData.fullName,
+      idNumber: initialData.idNumber,
+      phone: initialData.phone,
+    }));
+  }
+}, [isOpen, initialData.fullName, initialData.idNumber, initialData.phone]);
 ```
+
+This ensures that:
+- When `isOpen` becomes `true`, the form updates with the latest `initialData`
+- Only the three locked fields are synchronized (not overwriting other user input)
+- The effect re-runs if any of the initial data values change
 
 ---
 
-## Visual Design
+## Summary
 
-```text
-┌─────────────────────────────────────────────────┐
-│ Nombre Completo 🔒                              │
-│ ┌─────────────────────────────────────────────┐ │
-│ │ María García                                │ │  ← bg-gray-100
-│ └─────────────────────────────────────────────┘ │    text-gray-600
-│                                                 │    cursor: not-allowed
-│ Número de Identificación 🔒                     │    title="Este dato fue..."
-│ ┌─────────────────────────────────────────────┐ │
-│ │ 123456789                                   │ │
-│ └─────────────────────────────────────────────┘ │
-│                                                 │
-│ Teléfono 🔒                                     │
-│ ┌─────────────────────────────────────────────┐ │
-│ │ +506 8888-8888                              │ │
-│ └─────────────────────────────────────────────┘ │
-│                                                 │
-│ Edad (años)                   ← Still editable │
-│ ┌─────────────────────────────────────────────┐ │
-│ │                                             │ │
-│ └─────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────┘
-```
-
----
-
-## Files to Modify
-
-1. **`src/components/FirstTimeForm.tsx`**
-   - Add Lock icon import
-   - Update fullName, idNumber, and phone Input fields with:
-     - `disabled` attribute
-     - Locked styling classes
-     - `title` attribute for tooltip
-   - Add Lock icon next to each label
-   - Remove `onChange` handlers from these three fields (optional, since disabled prevents changes anyway)
-
-2. **`src/contexts/LanguageContext.tsx`**
-   - Add `form.lockedField` translation key
-
----
-
-## Summary of Changes
-
-| Field | Current | After |
-|-------|---------|-------|
-| Full Name | Editable | Disabled, gray background, lock icon |
-| ID Number | Editable | Disabled, gray background, lock icon |
-| Phone | Editable | Disabled, gray background, lock icon |
-| All other fields | Editable | Unchanged |
+| Issue | Fix |
+|-------|-----|
+| `useState` ignores prop updates after initial render | Add `useEffect` to sync when dialog opens |
+| Locked fields show empty values | Populate from `initialData` when `isOpen` becomes true |
