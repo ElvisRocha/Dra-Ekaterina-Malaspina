@@ -107,19 +107,20 @@ const DateTimeStep = ({
       {/* Navigation Buttons */}
       <div className="flex gap-3 pt-4">
         <Button
+          variant="outline"
           onClick={onBack}
-          className="flex-1 h-12 rounded-full btn-outline-gradient"
+          className="flex-1"
           size="lg"
         >
-          <span>{t('booking.back')}</span>
+          {t('booking.back')}
         </Button>
         <Button
           onClick={onNext}
           disabled={!isValid}
-          className="flex-1 h-12 rounded-full btn-gradient"
+          className="flex-1 btn-gradient"
           size="lg"
         >
-          <span>{t('booking.next')}</span>
+          {t('booking.next')}
         </Button>
       </div>
     </motion.div>
