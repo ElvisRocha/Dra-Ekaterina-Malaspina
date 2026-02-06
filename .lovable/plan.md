@@ -1,78 +1,127 @@
 
 
-# Plan: Reducir Opacidad del Idioma Inactivo en Toggle
+# Plan: Estandarizar Hover de Botones en /contacto
 
-## Resumen
+## Analisis
 
-Aplicar una opacidad reducida al boton del idioma NO seleccionado para crear un contraste visual mas claro entre el estado activo e inactivo del toggle de idioma.
+Se identificaron 3 botones en la pagina:
+
+| Boton | Clase/Variant | Hover Actual |
+|-------|---------------|--------------|
+| Enviar Mensaje | `btn-gradient` | Degradado coral-fuchsia con elevacion |
+| Chatear por WhatsApp | `btn-gradient` | Degradado coral-fuchsia con elevacion |
+| Como Llegar | `variant="outline"` | `bg-accent` (coral) - diferente |
+
+El boton "Como Llegar" usa el variant outline estandar que tiene un hover diferente al estilo corporativo.
 
 ---
 
-## Estado Actual
+## Solucion
 
-Los botones inactivos usan `text-muted-foreground` que tiene cierto contraste, pero el usuario desea que sea aun mas evidente cual idioma esta activo.
+Aplicar la clase `btn-outline-gradient` al boton "Como Llegar" para que tenga un hover consistente con el estilo corporativo pero manteniendo su apariencia outline.
 
----
+Sin embargo, primero debo verificar si existe esta clase en el CSS. Segun el archivo `src/index.css`, solo existe `btn-gradient` pero NO `btn-outline-gradient`.
 
-## Cambios Propuestos
+### Opcion A: Crear clase `btn-outline-gradient`
 
-Se modificaran 3 ubicaciones donde existe el toggle de idioma:
+Agregar una nueva clase CSS que mantenga el estilo outline pero active el degradado en hover:
 
-### 1. Navbar Desktop (lineas 61-75)
+```css
+/* src/index.css - agregar despues de btn-gradient */
+.btn-outline-gradient {
+  @apply relative overflow-hidden font-medium px-8 py-4 rounded-full transition-all duration-300;
+  @apply border-2 border-primary text-primary bg-transparent;
+}
 
-```tsx
-// Antes - boton inactivo
-'text-muted-foreground hover:text-foreground'
+.btn-outline-gradient:hover {
+  @apply text-white border-transparent;
+  transform: translateY(-2px);
+  background: var(--gradient-cta);
+  box-shadow: var(--shadow-soft);
+}
 
-// Despues - agregar opacidad reducida
-'text-muted-foreground/50 hover:text-muted-foreground'
+.btn-outline-gradient > * {
+  @apply relative z-10;
+}
 ```
 
-### 2. Navbar Mobile (lineas 144-158)
+### Opcion B: Cambiar a btn-gradient directamente
 
-```tsx
-// Antes - boton inactivo
-'text-muted-foreground'
+Cambiar el boton "Como Llegar" para usar `btn-gradient` como los otros dos botones principales.
 
-// Despues - agregar opacidad reducida
-'text-muted-foreground/50 hover:text-muted-foreground'
+---
+
+## Recomendacion
+
+**Opcion A** es preferible porque:
+- Mantiene la jerarquia visual (botones outline son secundarios)
+- El boton "Como Llegar" es menos importante que "Enviar Mensaje" o "WhatsApp"
+- Pero al hacer hover, activa el mismo degradado corporativo
+
+---
+
+## Cambios a Realizar
+
+### 1. Archivo: `src/index.css`
+
+Agregar despues de la linea 180 (despues de `.btn-gradient span`):
+
+```css
+/* Outline button with gradient hover */
+.btn-outline-gradient {
+  @apply relative overflow-hidden font-medium px-8 py-4 rounded-full transition-all duration-300;
+  @apply border-2 border-primary text-primary bg-transparent;
+}
+
+.btn-outline-gradient:hover {
+  @apply text-white border-transparent;
+  transform: translateY(-2px);
+  background: var(--gradient-cta);
+  box-shadow: var(--shadow-soft);
+}
+
+.btn-outline-gradient > * {
+  @apply relative z-10;
+}
 ```
 
-### 3. BookingNavbar (lineas 32-46)
+### 2. Archivo: `src/pages/Contact.tsx`
+
+Modificar el boton "Como Llegar" (lineas 327-337):
 
 ```tsx
-// Antes - boton inactivo
-'text-muted-foreground hover:text-foreground'
+// Antes
+<Button 
+  variant="outline"
+  className="rounded-full"
+  onClick={...}
+>
 
-// Despues - agregar opacidad reducida
-'text-muted-foreground/50 hover:text-muted-foreground'
+// Despues - remover variant y usar clase personalizada
+<Button 
+  className="h-12 btn-outline-gradient"
+  onClick={...}
+>
 ```
 
 ---
 
-## Comparacion Visual
+## Resultado Final
 
-| Estado | Antes | Despues |
-|--------|-------|---------|
-| Activo | `bg-primary text-primary-foreground` | Sin cambios (color completo) |
-| Inactivo | `text-muted-foreground` (~45% contraste) | `text-muted-foreground/50` (~22% contraste) |
-| Inactivo + Hover | `text-foreground` | `text-muted-foreground` (sutil mejora) |
+| Boton | Estado Normal | Estado Hover |
+|-------|---------------|--------------|
+| Enviar Mensaje | Degradado magenta-fuchsia | Degradado coral-fuchsia + elevacion |
+| Chatear por WhatsApp | Degradado magenta-fuchsia | Degradado coral-fuchsia + elevacion |
+| Como Llegar | Borde primario, fondo transparente | Degradado coral-fuchsia + elevacion |
 
----
-
-## Archivos a Modificar
-
-| Archivo | Cambios |
-|---------|---------|
-| `src/components/Navbar.tsx` | 4 clases (2 desktop + 2 mobile) |
-| `src/components/booking/BookingNavbar.tsx` | 2 clases |
+Todos los botones tendran el mismo efecto hover de degradado corporativo, manteniendo la consistencia visual de la pagina.
 
 ---
 
-## Resultado Esperado
+## Archivos Modificados
 
-- El idioma activo mantiene su apariencia completa con fondo primario
-- El idioma inactivo se ve notablemente mas apagado (50% de opacidad)
-- Al hacer hover sobre el inactivo, aumenta ligeramente la visibilidad
-- Distincion visual clara e inmediata de cual idioma esta seleccionado
+| Archivo | Cambio |
+|---------|--------|
+| `src/index.css` | Agregar clase `btn-outline-gradient` |
+| `src/pages/Contact.tsx` | Actualizar boton "Como Llegar" |
 
