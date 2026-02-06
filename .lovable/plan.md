@@ -1,128 +1,148 @@
 
-# Plan: Aplicar Hover Gradient a Botones de Retroceso
+# Plan: Agregar Navegación al Formulario de Primera Vez
 
 ## Resumen
 
-Crear una nueva clase CSS para los botones de retroceso que mantenga su apariencia outline en estado normal, pero aplique el mismo efecto de hover gradient que tienen los botones "Siguiente".
+Modificar el componente `FirstTimeForm` para incluir un botón "Atrás" que regrese al modal anterior y habilitar el botón de cierre (X) para cerrar el formulario completamente.
 
 ---
 
-## Botones de Retroceso Identificados
+## Cambios Requeridos
 
-| Componente | Linea | Texto del Boton |
-|------------|-------|-----------------|
-| PatientDataStep.tsx | 87-93 | "Atras" |
-| DateTimeStep.tsx | 109-115 | "Atras" |
-| ConfirmStep.tsx | 133-140 | "Atras" |
+### Archivo: `src/components/FirstTimeForm.tsx`
 
----
+#### 1. Actualizar Props del Componente
 
-## Solucion
+Agregar un nuevo callback `onBack` para manejar el retroceso:
 
-### Paso 1: Crear Nueva Clase CSS
-
-Agregar en `src/index.css` una nueva clase `btn-outline-gradient` que:
-- Mantenga el estilo outline en estado normal (borde visible, fondo transparente)
-- En hover, aplique el gradiente y colores del `btn-gradient`
-
-**Archivo:** `src/index.css`
-
-```css
-/* Boton outline con hover gradient - para botones de retroceso */
-.btn-outline-gradient {
-  @apply relative overflow-hidden font-medium transition-all duration-300;
-  @apply bg-transparent border border-primary text-primary;
-}
-
-.btn-outline-gradient:hover {
-  @apply text-white border-transparent;
-  background: var(--gradient-cta);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-elevated);
-}
-
-.btn-outline-gradient::before {
-  content: '';
-  @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-  background: linear-gradient(135deg, hsl(var(--fuchsia)) 0%, hsl(var(--coral)) 100%);
-}
-
-.btn-outline-gradient:hover::before {
-  @apply opacity-100;
-}
-
-.btn-outline-gradient > * {
-  @apply relative z-10;
+```tsx
+interface FirstTimeFormProps {
+  isOpen: boolean;
+  onComplete: () => void;
+  onBack: () => void;        // NUEVO: Para volver al modal anterior
+  onClose: () => void;       // NUEVO: Para cerrar el formulario
+  initialData: {
+    fullName: string;
+    idNumber: string;
+    phone: string;
+  };
 }
 ```
 
----
+#### 2. Habilitar el Botón X de Cierre
 
-### Paso 2: Aplicar a Botones de Retroceso
+Cambiar el `onOpenChange` del Dialog para que llame a `onClose`:
 
-Cambiar las clases de los 3 botones "Atras":
+```tsx
+// Antes (línea 134)
+<Dialog open={isOpen} onOpenChange={() => {}}>
 
-**PatientDataStep.tsx (linea 87-93):**
+// Después
+<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+```
+
+#### 3. Agregar Botón "Atrás" en la Sección de Botones
+
+Modificar la sección de botones (líneas 392-396) para incluir dos botones con el layout estándar:
+
 ```tsx
 // Antes
-<Button
-  variant="outline"
-  onClick={onBack}
-  className="flex-1 h-12 rounded-full"
->
+<div className="pt-4 pb-6">
+  <Button type="submit" className="w-full btn-gradient">
+    <span>{t('form.submit')}</span>
+  </Button>
+</div>
 
-// Despues
-<Button
-  variant="outline"
-  onClick={onBack}
-  className="flex-1 h-12 rounded-full btn-outline-gradient"
->
-```
-
-**DateTimeStep.tsx (linea 109-115):**
-```tsx
-// Antes
-<Button
-  variant="outline"
-  onClick={onBack}
-  className="flex-1 h-12 rounded-full"
->
-
-// Despues
-<Button
-  variant="outline"
-  onClick={onBack}
-  className="flex-1 h-12 rounded-full btn-outline-gradient"
->
-```
-
-**ConfirmStep.tsx (linea 133-140):**
-```tsx
-// Antes
-<Button
-  variant="outline"
-  onClick={onBack}
-  className="flex-1 h-12 rounded-full"
-  disabled={isLoading}
->
-
-// Despues
-<Button
-  variant="outline"
-  onClick={onBack}
-  className="flex-1 h-12 rounded-full btn-outline-gradient"
-  disabled={isLoading}
->
+// Después
+<div className="flex gap-3 pt-4 pb-6">
+  <Button
+    type="button"
+    variant="outline"
+    onClick={onBack}
+    className="flex-1 h-12 rounded-full btn-outline-gradient"
+  >
+    <span>{t('booking.back')}</span>
+  </Button>
+  <Button
+    type="submit"
+    className="flex-1 h-12 rounded-full btn-gradient"
+  >
+    <span>{t('form.submit')}</span>
+  </Button>
+</div>
 ```
 
 ---
 
-## Resultado Visual
+### Archivo: `src/pages/BookAppointment.tsx`
 
-| Estado | Boton Retroceso | Boton Siguiente |
-|--------|-----------------|-----------------|
-| Normal | Borde magenta, fondo transparente, texto magenta | Fondo gradiente, texto blanco |
-| Hover | Fondo gradiente, texto blanco (igual que Siguiente) | Fondo gradiente animado, texto blanco |
+#### 1. Agregar Handler para "Atrás"
+
+Crear función que cierre el FirstTimeForm y vuelva a mostrar el NewPatientModal:
+
+```tsx
+const handleFirstTimeFormBack = () => {
+  setShowFirstTimeForm(false);
+  setShowNewPatientModal(true);
+};
+```
+
+#### 2. Agregar Handler para Cerrar
+
+Crear función que simplemente cierre el formulario sin volver al modal:
+
+```tsx
+const handleFirstTimeFormClose = () => {
+  setShowFirstTimeForm(false);
+};
+```
+
+#### 3. Actualizar el Uso del Componente
+
+Pasar los nuevos props al FirstTimeForm:
+
+```tsx
+// Antes (líneas 263-271)
+<FirstTimeForm
+  isOpen={showFirstTimeForm}
+  onComplete={handleFirstTimeFormComplete}
+  initialData={{...}}
+/>
+
+// Después
+<FirstTimeForm
+  isOpen={showFirstTimeForm}
+  onComplete={handleFirstTimeFormComplete}
+  onBack={handleFirstTimeFormBack}
+  onClose={handleFirstTimeFormClose}
+  initialData={{...}}
+/>
+```
+
+---
+
+## Flujo de Navegación Resultante
+
+```text
+ConfirmationPopup
+       |
+       v
+NewPatientModal
+  |           |
+  v           v
+"Llenar     "Llenar en
+ ahora"      la clínica"
+  |               |
+  v               v
+FirstTimeForm   Toast + Cerrar
+  |     |
+  v     v
+Atrás  Enviar
+  |      |
+  v      v
+Vuelve  Toast + Cerrar
+al Modal
+```
 
 ---
 
@@ -130,7 +150,15 @@ Cambiar las clases de los 3 botones "Atras":
 
 | Archivo | Cambio |
 |---------|--------|
-| src/index.css | Agregar clase `.btn-outline-gradient` |
-| src/components/booking/steps/PatientDataStep.tsx | Agregar clase al boton "Atras" |
-| src/components/booking/steps/DateTimeStep.tsx | Agregar clase al boton "Atras" |
-| src/components/booking/steps/ConfirmStep.tsx | Agregar clase al boton "Atras" |
+| `src/components/FirstTimeForm.tsx` | Agregar props `onBack` y `onClose`, habilitar botón X, agregar botón "Atrás" |
+| `src/pages/BookAppointment.tsx` | Agregar handlers y pasar nuevos props |
+
+---
+
+## Estilos Aplicados
+
+Los botones utilizarán exactamente los mismos estilos que los botones de navegación del flujo de agendamiento:
+
+- **Botón Atrás**: `h-12 rounded-full btn-outline-gradient` (outline con hover gradient)
+- **Botón Enviar**: `h-12 rounded-full btn-gradient` (gradient sólido)
+- **Layout**: `flex gap-3` con `flex-1` en ambos botones para distribución equitativa
