@@ -24,7 +24,7 @@ interface PatientData {
 
 const BookAppointmentContent = () => {
   const [searchParams] = useSearchParams();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const { toast } = useToast();
   
   // Step state
@@ -233,8 +233,21 @@ const BookAppointmentContent = () => {
 
       {/* Minimal Footer */}
       <footer className="border-t border-border py-4 mt-auto">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2025 Dra. Ekaterina Malaspina Riazanova — Clínica Esperanza
+        <div className="container mx-auto px-4 flex flex-col md:flex-row md:justify-between md:items-center gap-2 text-sm text-muted-foreground">
+          <p className="text-center md:text-left">
+            © 2025 Dra. Ekaterina Malaspina Riazanova — Clínica Esperanza. {t('footer.rights')}.
+          </p>
+          <p className="text-center md:text-right">
+            {t('footer.madeBy')}{' '}
+            <a
+              href="https://www.smartflow-automations.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground hover:underline transition-colors"
+            >
+              SmartFlow Automations
+            </a>
+          </p>
         </div>
       </footer>
 
