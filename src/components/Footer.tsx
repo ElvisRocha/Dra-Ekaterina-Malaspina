@@ -6,7 +6,7 @@ const Footer = () => {
   const { t } = useLanguage();
 
   return (
-    <footer className="bg-chocolate text-cream py-16">
+    <footer className="border-t border-gray-200 bg-chocolate text-cream py-16">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Logo & About */}
