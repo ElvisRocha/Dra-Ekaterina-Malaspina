@@ -67,8 +67,8 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-cream/10">
+        {/* Bottom Bar — uses box-shadow instead of border to avoid sub-pixel rendering artifacts */}
+        <div className="pt-8" style={{ boxShadow: 'inset 0 1px 0 0 rgba(255,255,255,0.1)' }}>
           <p className="text-center text-cream/50 text-sm">
             © 2025 Dra. Ekaterina Malaspina Riazanova — Clínica Esperanza. {t('footer.rights')}.
           </p>
