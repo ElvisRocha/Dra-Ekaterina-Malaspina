@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
+import { Stethoscope } from 'lucide-react';
 
 interface FinalCTAProps {
   onBookClick: () => void;
@@ -28,7 +29,7 @@ const FinalCTA = ({ onBookClick }: FinalCTAProps) => {
           {/* Decorative */}
           <div className="flex items-center justify-center gap-4 mb-8">
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-white/50" />
-            <span className="text-3xl">🌷</span>
+            <img src="/src/assets/Isotipo.png" alt="" class="h-40 w-auto mb-4 brightness-0 invert opacity-90"></img>
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-white/50" />
           </div>
 
@@ -48,7 +49,7 @@ const FinalCTA = ({ onBookClick }: FinalCTAProps) => {
               className="bg-white text-magenta hover:bg-white/90 text-lg px-10 py-6 rounded-full shadow-elevated font-semibold"
             >
               <span className="flex items-center gap-2">
-                <span>💫</span>
+                <Stethoscope className="!size-5 text-magenta" />
                 {t('cta.button')}
               </span>
             </Button>
