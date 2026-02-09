@@ -158,6 +158,7 @@
     @apply relative overflow-hidden text-white font-medium px-8 py-4 rounded-full transition-all duration-300;
     background: var(--gradient-cta);
     box-shadow: var(--shadow-soft);
+    isolation: isolate;
   }
 
   .btn-gradient:hover {
@@ -169,14 +170,11 @@
     content: '';
     @apply absolute inset-0 opacity-0 transition-opacity duration-300;
     background: linear-gradient(135deg, hsl(var(--fuchsia)) 0%, hsl(var(--coral)) 100%);
+    z-index: -1;
   }
 
   .btn-gradient:hover::before {
     @apply opacity-100;
-  }
-
-  .btn-gradient > * {
-    @apply relative z-10;
   }
 
   /* Card styles */
