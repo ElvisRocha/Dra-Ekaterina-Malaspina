@@ -67,7 +67,11 @@ const translations: Translations = {
   'cat.colposcopia': { es: 'Colposcopia', en: 'Colposcopy' },
   
   // Testimonials
-  'testimonials.title': { es: 'Confían en nosotras', en: 'They trust us' },
+  'testimonials.title': { es: 'Confía en nosotras', en: 'Trust us' },
+  'testimonials.subtitle': {
+    es: 'Historias reales de pacientes satisfechas que confían en nuestra experiencia y profesionalismo',
+    en: 'Real stories from satisfied patients who trust our experience and professionalism',
+  },
   'testimonials.badge': { es: 'Ginecología y Obstetricia certificada', en: 'Certified Gynecology and Obstetrics' },
   'testimonials.follow': { es: 'Síguenos en Instagram', en: 'Follow us on Instagram' },
   
