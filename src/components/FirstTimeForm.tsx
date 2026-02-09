@@ -26,8 +26,12 @@ interface FirstTimeFormProps {
   };
 }
 
+interface FormErrors {
+  [key: string]: string | undefined;
+}
+
 const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) => {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     fullName: initialData.fullName,
     age: '',
@@ -56,6 +60,8 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
     familyHistory: '',
   });
 
+  const [errors, setErrors] = useState<FormErrors>({});
+
   // Sync initialData to formData when dialog opens
   useEffect(() => {
     if (isOpen) {
@@ -65,19 +71,94 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
         idNumber: initialData.idNumber,
         phone: initialData.phone,
       }));
+      setErrors({});
     }
   }, [isOpen, initialData.fullName, initialData.idNumber, initialData.phone]);
 
   const updateField = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    // Clear error for this field when user types
+    if (errors[field]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    }
+  };
+
+  const validate = (): FormErrors => {
+    const newErrors: FormErrors = {};
+    const required = t('form.required');
+
+    // Always-required fields
+    if (!formData.age.trim()) newErrors.age = required;
+    if (!formData.dob.trim()) newErrors.dob = required;
+    if (!formData.email.trim()) {
+      newErrors.email = required;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = t('form.invalidEmail');
+    }
+    if (!formData.firstPeriodAge.trim()) newErrors.firstPeriodAge = required;
+    if (!formData.lastPeriodDate.trim()) newErrors.lastPeriodDate = required;
+    if (!formData.familyHistory.trim()) newErrors.familyHistory = required;
+
+    // Conditional: toggle detail fields
+    if (formData.hasDisease && !formData.diseaseDetails.trim()) {
+      newErrors.diseaseDetails = required;
+    }
+    if (formData.takesMedication && !formData.medicationDetails.trim()) {
+      newErrors.medicationDetails = required;
+    }
+    if (formData.hadSurgery && !formData.surgeryDetails.trim()) {
+      newErrors.surgeryDetails = required;
+    }
+    if (formData.usesContraceptive && !formData.contraceptiveDetails.trim()) {
+      newErrors.contraceptiveDetails = required;
+    }
+
+    // Pregnancy section
+    if (formData.hasBeenPregnant) {
+      if (!formData.pregnancyCount.trim()) {
+        newErrors.pregnancyCount = required;
+      }
+      // At least one of vaginalBirths, cesareans, abortions must have info
+      const hasVaginal = formData.vaginalBirths.trim() !== '';
+      const hasCesareans = formData.cesareans.trim() !== '';
+      const hasAbortions = formData.abortions.trim() !== '';
+      if (!hasVaginal && !hasCesareans && !hasAbortions) {
+        newErrors.pregnancyBreakdown = t('form.pregnancyBreakdown');
+      }
+    }
+
+    // Pap smear
+    if (formData.hadPapSmear && !formData.lastPapSmear.trim()) {
+      newErrors.lastPapSmear = required;
+    }
+
+    return newErrors;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    // Auto-default empty pregnancy fields to '0'
+    const finalData = { ...formData };
+    if (finalData.hasBeenPregnant) {
+      if (!finalData.vaginalBirths.trim()) finalData.vaginalBirths = '0';
+      if (!finalData.cesareans.trim()) finalData.cesareans = '0';
+      if (!finalData.abortions.trim()) finalData.abortions = '0';
+    }
+
     // Collect all data (for future n8n integration)
     const patientData = {
-      ...formData,
+      ...finalData,
       timestamp: new Date().toISOString(),
     };
 
@@ -91,13 +172,22 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
     onComplete();
   };
 
+  const errorClass = (field: string) =>
+    errors[field] ? 'border-red-500 focus:ring-red-500' : '';
+
+  const renderError = (field: string) =>
+    errors[field] ? (
+      <p className="text-xs text-red-500 mt-1">{errors[field]}</p>
+    ) : null;
+
   const renderToggleField = (
     label: string,
     value: boolean,
     onChange: (val: boolean) => void,
     detailsValue?: string,
     onDetailsChange?: (val: string) => void,
-    detailsPlaceholder?: string
+    detailsPlaceholder?: string,
+    detailsErrorKey?: string
   ) => (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
@@ -118,8 +208,9 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
             value={detailsValue}
             onChange={(e) => onDetailsChange(e.target.value)}
             placeholder={detailsPlaceholder}
-            className="mt-2"
+            className={`mt-2 ${detailsErrorKey ? errorClass(detailsErrorKey) : ''}`}
           />
+          {detailsErrorKey && renderError(detailsErrorKey)}
         </motion.div>
       )}
     </div>
@@ -184,39 +275,42 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
               </div>
               <div>
                 <Label htmlFor="age" className="flex items-center gap-1">
-                  {t('form.age')}
-                  <span className="h-3 w-3" /> {/* Spacer to match lock icon height */}
+                  {t('form.age')} *
+                  <span className="h-3 w-3" />
                 </Label>
                 <Input
                   id="age"
                   type="number"
                   value={formData.age}
                   onChange={(e) => updateField('age', e.target.value)}
-                  className="mt-1"
+                  className={`mt-1 ${errorClass('age')}`}
                 />
+                {renderError('age')}
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="dob">{t('form.dob')}</Label>
+                <Label htmlFor="dob">{t('form.dob')} *</Label>
                 <Input
                   id="dob"
                   type="date"
                   value={formData.dob}
                   onChange={(e) => updateField('dob', e.target.value)}
-                  className="mt-1"
+                  className={`mt-1 ${errorClass('dob')}`}
                 />
+                {renderError('dob')}
               </div>
               <div>
-                <Label htmlFor="email">{t('form.email')}</Label>
+                <Label htmlFor="email">{t('form.email')} *</Label>
                 <Input
                   id="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => updateField('email', e.target.value)}
-                  className="mt-1"
+                  className={`mt-1 ${errorClass('email')}`}
                 />
+                {renderError('email')}
               </div>
             </div>
 
@@ -228,7 +322,8 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
                 (val) => updateField('hasDisease', val),
                 formData.diseaseDetails,
                 (val) => updateField('diseaseDetails', val),
-                t('form.which')
+                t('form.which'),
+                'diseaseDetails'
               )}
 
               {renderToggleField(
@@ -237,7 +332,8 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
                 (val) => updateField('takesMedication', val),
                 formData.medicationDetails,
                 (val) => updateField('medicationDetails', val),
-                t('form.which')
+                t('form.which'),
+                'medicationDetails'
               )}
 
               {renderToggleField(
@@ -246,7 +342,8 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
                 (val) => updateField('hadSurgery', val),
                 formData.surgeryDetails,
                 (val) => updateField('surgeryDetails', val),
-                t('form.surgeryWhat')
+                t('form.surgeryWhat'),
+                'surgeryDetails'
               )}
             </div>
 
@@ -254,24 +351,26 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
               {/* Menstrual History */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="firstPeriodAge">{t('form.firstPeriod')}</Label>
+                  <Label htmlFor="firstPeriodAge">{t('form.firstPeriod')} *</Label>
                   <Input
                     id="firstPeriodAge"
                     type="number"
                     value={formData.firstPeriodAge}
                     onChange={(e) => updateField('firstPeriodAge', e.target.value)}
-                    className="mt-1"
+                    className={`mt-1 ${errorClass('firstPeriodAge')}`}
                   />
+                  {renderError('firstPeriodAge')}
                 </div>
                 <div>
-                  <Label htmlFor="lastPeriodDate">{t('form.lastPeriod')}</Label>
+                  <Label htmlFor="lastPeriodDate">{t('form.lastPeriod')} *</Label>
                   <Input
                     id="lastPeriodDate"
                     type="date"
                     value={formData.lastPeriodDate}
                     onChange={(e) => updateField('lastPeriodDate', e.target.value)}
-                    className="mt-1"
+                    className={`mt-1 ${errorClass('lastPeriodDate')}`}
                   />
+                  {renderError('lastPeriodDate')}
                 </div>
               </div>
 
@@ -281,7 +380,8 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
                 (val) => updateField('usesContraceptive', val),
                 formData.contraceptiveDetails,
                 (val) => updateField('contraceptiveDetails', val),
-                t('form.whichMethod')
+                t('form.whichMethod'),
+                'contraceptiveDetails'
               )}
             </div>
 
@@ -297,52 +397,58 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
-                  className="grid grid-cols-2 md:grid-cols-5 gap-3"
+                  className="space-y-2"
                 >
-                  <div>
-                    <Label className="text-xs">{t('form.howManyTimes')}</Label>
-                    <Input
-                      type="number"
-                      value={formData.pregnancyCount}
-                      onChange={(e) => updateField('pregnancyCount', e.target.value)}
-                      className="mt-1"
-                    />
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <div>
+                      <Label className="text-xs">{t('form.howManyTimes')} *</Label>
+                      <Input
+                        type="number"
+                        value={formData.pregnancyCount}
+                        onChange={(e) => updateField('pregnancyCount', e.target.value)}
+                        className={`mt-1 ${errorClass('pregnancyCount')}`}
+                      />
+                      {renderError('pregnancyCount')}
+                    </div>
+                    <div>
+                      <Label className="text-xs">{t('form.vaginalBirths')}</Label>
+                      <Input
+                        type="number"
+                        value={formData.vaginalBirths}
+                        onChange={(e) => updateField('vaginalBirths', e.target.value)}
+                        className={`mt-1 ${errors.pregnancyBreakdown ? 'border-red-500 focus:ring-red-500' : ''}`}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">{t('form.cesareans')}</Label>
+                      <Input
+                        type="number"
+                        value={formData.cesareans}
+                        onChange={(e) => updateField('cesareans', e.target.value)}
+                        className={`mt-1 ${errors.pregnancyBreakdown ? 'border-red-500 focus:ring-red-500' : ''}`}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">{t('form.abortions')}</Label>
+                      <Input
+                        type="number"
+                        value={formData.abortions}
+                        onChange={(e) => updateField('abortions', e.target.value)}
+                        className={`mt-1 ${errors.pregnancyBreakdown ? 'border-red-500 focus:ring-red-500' : ''}`}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">{t('form.others')}</Label>
+                      <Input
+                        value={formData.otherPregnancies}
+                        onChange={(e) => updateField('otherPregnancies', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label className="text-xs">{t('form.vaginalBirths')}</Label>
-                    <Input
-                      type="number"
-                      value={formData.vaginalBirths}
-                      onChange={(e) => updateField('vaginalBirths', e.target.value)}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">{t('form.cesareans')}</Label>
-                    <Input
-                      type="number"
-                      value={formData.cesareans}
-                      onChange={(e) => updateField('cesareans', e.target.value)}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">{t('form.abortions')}</Label>
-                    <Input
-                      type="number"
-                      value={formData.abortions}
-                      onChange={(e) => updateField('abortions', e.target.value)}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">{t('form.others')}</Label>
-                    <Input
-                      value={formData.otherPregnancies}
-                      onChange={(e) => updateField('otherPregnancies', e.target.value)}
-                      className="mt-1"
-                    />
-                  </div>
+                  {errors.pregnancyBreakdown && (
+                    <p className="text-xs text-red-500">{errors.pregnancyBreakdown}</p>
+                  )}
                 </motion.div>
               )}
             </div>
@@ -360,27 +466,29 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                 >
-                  <Label htmlFor="lastPapSmear">{t('form.lastPap')}</Label>
+                  <Label htmlFor="lastPapSmear">{t('form.lastPap')} *</Label>
                   <Input
                     id="lastPapSmear"
+                    type="date"
                     value={formData.lastPapSmear}
                     onChange={(e) => updateField('lastPapSmear', e.target.value)}
-                    placeholder={language === 'es' ? 'Fecha o descripción' : 'Date or description'}
-                    className="mt-1"
+                    className={`mt-1 ${errorClass('lastPapSmear')}`}
                   />
+                  {renderError('lastPapSmear')}
                 </motion.div>
               )}
             </div>
 
             <div className="border-t border-border pt-4">
-              <Label htmlFor="familyHistory">{t('form.familyHistory')}</Label>
+              <Label htmlFor="familyHistory">{t('form.familyHistory')} *</Label>
               <Textarea
                 id="familyHistory"
                 value={formData.familyHistory}
                 onChange={(e) => updateField('familyHistory', e.target.value)}
-                className="mt-1"
+                className={`mt-1 ${errorClass('familyHistory')}`}
                 rows={3}
               />
+              {renderError('familyHistory')}
             </div>
 
             <div className="pt-4 pb-6">

@@ -172,6 +172,9 @@ const translations: Translations = {
   'form.submit': { es: 'Guardar datos', en: 'Save information' },
   'form.success': { es: '¡Datos guardados correctamente! Gracias por completar su información.', en: 'Information saved successfully! Thank you for completing your details.' },
   'form.lockedField': { es: 'Este dato fue proporcionado al agendar su cita', en: 'This information was provided when booking your appointment' },
+  'form.required': { es: 'Este campo es obligatorio', en: 'This field is required' },
+  'form.invalidEmail': { es: 'Ingrese un correo electrónico válido', en: 'Enter a valid email address' },
+  'form.pregnancyBreakdown': { es: 'Al menos uno de estos campos debe tener información', en: 'At least one of these fields must have information' },
   
   // Notes
   'notes.vph': {
