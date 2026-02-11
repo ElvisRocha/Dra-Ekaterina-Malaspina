@@ -15,7 +15,7 @@ const HeroSection = ({ onBookClick }: HeroSectionProps) => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <img
-          src="https://res.cloudinary.com/da1sq9diw/image/upload/w_auto,dpr_auto,f_auto,q_auto/v1770736693/hero-background.jpg"
+          src="https://res.cloudinary.com/dcvipikha/image/upload/w_auto,dpr_auto,f_auto,q_auto/v1770786749/hero-background_nnxouv.jpg"
           alt="Hero background"
           className="w-full h-full object-cover"
           fetchpriority="high"

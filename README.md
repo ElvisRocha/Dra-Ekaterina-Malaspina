@@ -1,6 +1,6 @@
-# Clínica Esperanza - Sistema de Reservas
+# Dra. Ekaterina Malaspina Riazanova - Clínica Esperanza - Sistema de Reservas
 
-Sistema web de gestión de citas para la Clínica Esperanza de la Dra. Ekaterina Malaspina Riazanova, especialista en Ginecología y Obstetricia.
+Sistema web de gestión de citas para la Dra. Ekaterina Malaspina Riazanova - Clínica Esperanza, especialista en Ginecología y Obstetricia.
 
 ## Descripción
 

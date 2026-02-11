@@ -9,15 +9,15 @@ import { Button } from '@/components/ui/button';
 
 // TODO: Replace these placeholder images with real clinic photos
 const galleryImages = [
-  { id: 1, src: 'https://res.cloudinary.com/da1sq9diw/image/upload/f_auto,q_auto/v1770732824/atencion_en_camilla.jpg', loading: "lazy",  category: 'office', alt: 'Consultorio médico' },
-  { id: 2, src: 'https://res.cloudinary.com/da1sq9diw/image/upload/f_auto,q_auto/v1770732824/doctoras.jpg', loading: "lazy", category: 'equipment', alt: 'Equipo médico' },
-  { id: 3, src: 'https://res.cloudinary.com/da1sq9diw/image/upload/f_auto,q_auto/v1770732824/doctora_con_utero.jpg', loading: "lazy", category: 'ultrasounds', alt: 'Doctora Ekaterina' },
-  { id: 4, src: 'https://res.cloudinary.com/da1sq9diw/image/upload/w_550,h_450,c_fill,g_face,f_auto,q_auto/v1770732824/doctora_ekaterina.jpg', loading: "lazy", category: 'patients', alt: 'Doctora Ekaterina' },
-  { id: 5, src: 'https://res.cloudinary.com/da1sq9diw/image/upload/f_auto,q_auto/v1770732824/puerta_consultorio.jpg', loading: "lazy", category: 'office', alt: 'Consultorio' },
+  { id: 1, src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1770786745/atencion_en_camilla_f5gwim.jpg', loading: "lazy",  category: 'office', alt: 'Consultorio médico' },
+  { id: 2, src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1770786745/doctoras_jvvulf.jpg', loading: "lazy", category: 'equipment', alt: 'Equipo médico' },
+  { id: 3, src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1770786745/doctora_con_utero_hf6ufx.jpg', loading: "lazy", category: 'ultrasounds', alt: 'Doctora Ekaterina' },
+  { id: 4, src: 'https://res.cloudinary.com/dcvipikha/image/upload/w_550,h_450,c_fill,g_face,f_auto,q_auto/v1770786745/doctora_ekaterina_sjbvon.jpg', loading: "lazy", category: 'patients', alt: 'Doctora Ekaterina' },
+  { id: 5, src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1770786745/puerta_consultorio_vvevmw.jpg', loading: "lazy", category: 'office', alt: 'Consultorio' },
   { id: 6, src: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&h=400&fit=crop', loading: "lazy", category: 'equipment', alt: 'Equipos de diagnóstico' },
   { id: 7, src: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&h=400&fit=crop', loading: "lazy", category: 'ultrasounds', alt: 'Ecografía 4D' },
   { id: 8, src: 'https://images.unsplash.com/photo-1609220136736-443140cffec6?w=600&h=400&fit=crop', loading: "lazy", category: 'patients', alt: 'Futura mamá' },
-  { id: 9, src: 'https://res.cloudinary.com/da1sq9diw/image/upload/f_auto,q_auto/v1770732824/consultorio_medico.jpg', loading: "lazy", category: 'office', alt: 'Consultorio' },
+  { id: 9, src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1770786745/consultorio_medico_kisecf.jpg', loading: "lazy", category: 'office', alt: 'Consultorio' },
   { id: 10, src: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=600&h=400&fit=crop', loading: "lazy", category: 'equipment', alt: 'Sala de procedimientos' },
   { id: 11, src: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=600&h=400&fit=crop', loading: "lazy", category: 'ultrasounds', alt: 'Monitoreo fetal' },
   { id: 12, src: 'https://images.unsplash.com/photo-1584515933487-779824d29309?w=600&h=400&fit=crop', loading: "lazy", category: 'patients', alt: 'Cuidado prenatal' },
