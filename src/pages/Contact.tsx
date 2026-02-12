@@ -5,6 +5,7 @@ import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from 'lucide-react';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import GoogleMapComponent from '@/components/GoogleMapComponent';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PhoneInput } from '@/components/ui/PhoneInput';
@@ -312,27 +313,16 @@ const ContactContent = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-secondary/30 rounded-2xl p-8 md:p-12 text-center"
+            className="bg-secondary/30 rounded-2xl p-6 md:p-8"
           >
-            {/* TODO: Integrate Google Maps embed with real clinic location */}
-            <div className="bg-muted rounded-xl h-64 md:h-80 flex items-center justify-center mb-6">
-              <div className="text-center">
-                <MapPin className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">
-                  {language === 'es' ? 'Mapa de ubicación' : 'Location Map'}
-                </p>
-              </div>
-            </div>
-            <Button 
-              className="h-12 px-6 btn-gradient rounded-full font-medium"
-              onClick={() => {
-                // TODO: Replace with actual Google Maps directions link
-                window.open('https://maps.google.com', '_blank');
-              }}
-            >
-              <MapPin className="w-5 h-5" />
-              <span>{language === 'es' ? 'Cómo Llegar' : 'Get Directions'}</span>
-            </Button>
+            <h2 className="font-display text-2xl text-foreground mb-4 text-center">
+              {language === 'es' ? 'Ubicación' : 'Location'}
+            </h2>
+            <GoogleMapComponent
+              className="w-full h-[300px] md:h-[400px] rounded-xl"
+              showDirectionsButton={true}
+              language={language}
+            />
           </motion.div>
         </div>
       </section>
