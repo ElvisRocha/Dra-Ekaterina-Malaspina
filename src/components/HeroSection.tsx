@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Stethoscope } from 'lucide-react';
+import IsotipoImg from '@/assets/Isotipo.png';
 
 interface HeroSectionProps {
   onBookClick: () => void;
@@ -40,7 +41,7 @@ const HeroSection = ({ onBookClick }: HeroSectionProps) => {
             {/* Decorative Line */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="h-px w-16 bg-gradient-to-r from-transparent to-coral" />
-              <img src="/src/assets/Isotipo.png" alt="" class="h-40 w-auto mb-1"></img>
+              <img src={IsotipoImg} alt="" class="h-40 w-auto mb-1"></img>
               <div className="h-px w-16 bg-gradient-to-l from-transparent to-coral" />
             </div>
 
