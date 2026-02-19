@@ -19,6 +19,10 @@ import { Card } from '@/components/ui/card';
 import ServiceInfoPanel from '@/components/booking/ServiceInfoPanel';
 import ServiceInfoModal from '@/components/booking/ServiceInfoModal';
 import IsotipoImg from '@/assets/Isotipo.png';
+import consultaImg from '@/assets/consulta.png';
+import ecografiaImg from '@/assets/ecografia.png';
+import dispositivoImg from '@/assets/dispositivo.png';
+import citologiaImg from '@/assets/citologia.png';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ServiceStepProps {
@@ -45,10 +49,10 @@ const ServiceStep = ({ selectedService, onSelectService, onNext }: ServiceStepPr
   }, [selectedService]);
 
   const categories = [
-    { key: 'consultas' as const, icon: '👩‍⚕️' },
-    { key: 'ultrasonidos' as const, icon: '🔬' },
-    { key: 'dispositivos' as const, icon: '💊' },
-    { key: 'colposcopia' as const, icon: '🔎' },
+    { key: 'consultas' as const, img: consultaImg, altEs: 'Icono de consulta', altEn: 'Consultation icon' },
+    { key: 'ultrasonidos' as const, img: ecografiaImg, altEs: 'Icono de ultrasonido', altEn: 'Ultrasound icon' },
+    { key: 'dispositivos' as const, img: dispositivoImg, altEs: 'Icono de dispositivo anticonceptivo', altEn: 'Contraceptive device icon' },
+    { key: 'colposcopia' as const, img: citologiaImg, altEs: 'Icono de colposcopía', altEn: 'Colposcopy icon' },
   ];
 
   const handleNextClick = () => {
@@ -100,7 +104,11 @@ const ServiceStep = ({ selectedService, onSelectService, onNext }: ServiceStepPr
                   >
                     <AccordionTrigger className="px-4 py-4 hover:no-underline hover:bg-secondary/50 transition-colors">
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <span className="text-xl flex-shrink-0">{category.icon}</span>
+                        <img
+                          src={category.img}
+                          alt={language === 'es' ? category.altEs : category.altEn}
+                          className="w-7 h-7 flex-shrink-0 object-contain"
+                        />
                         <span className="font-medium text-foreground flex-1 min-w-0 text-left">
                           {t(`cat.${category.key}`)}
                         </span>
