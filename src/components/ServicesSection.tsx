@@ -17,6 +17,10 @@ import {
   type Service 
 } from '@/data/services';
 import { Clock, ChevronRight, Info, X } from 'lucide-react';
+import consultaImg from '@/assets/consulta.png';
+import ecografiaImg from '@/assets/ecografia.png';
+import dispositivoImg from '@/assets/dispositivo.png';
+import citologiaImg from '@/assets/citologia.png';
 
 interface ServicesSectionProps {
   onBookService: (service: Service) => void;
@@ -27,10 +31,10 @@ const ServicesSection = ({ onBookService }: ServicesSectionProps) => {
   const [selectedInfo, setSelectedInfo] = useState<string | null>(null);
 
   const categories = [
-    { key: 'consultas' as const, icon: '👩‍⚕️' },
-    { key: 'ultrasonidos' as const, icon: '🔬' },
-    { key: 'dispositivos' as const, icon: '💊' },
-    { key: 'colposcopia' as const, icon: '🔎' },
+    { key: 'consultas' as const, img: consultaImg, altEs: 'Icono de consulta', altEn: 'Consultation icon' },
+    { key: 'ultrasonidos' as const, img: ecografiaImg, altEs: 'Icono de ultrasonido', altEn: 'Ultrasound icon' },
+    { key: 'dispositivos' as const, img: dispositivoImg, altEs: 'Icono de dispositivo anticonceptivo', altEn: 'Contraceptive device icon' },
+    { key: 'colposcopia' as const, img: citologiaImg, altEs: 'Icono de colposcopía', altEn: 'Colposcopy icon' },
   ];
 
   const getServiceInfo = (infoKey: string | undefined) => {
@@ -77,7 +81,12 @@ const ServicesSection = ({ onBookService }: ServicesSectionProps) => {
                 >
                   <AccordionTrigger className="px-6 py-5 hover:no-underline hover:bg-secondary/50 transition-colors">
                     <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <span className="text-2xl flex-shrink-0">{category.icon}</span>
+                      <img
+                        src={category.img}
+                        alt={language === 'es' ? category.altEs : category.altEn}
+                        className="w-8 h-8 flex-shrink-0 object-contain"
+                        aria-hidden="false"
+                      />
                       <span className="font-display text-xl text-foreground flex-1 min-w-0 text-left">
                         {t(`cat.${category.key}`)}
                       </span>
