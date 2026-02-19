@@ -95,6 +95,8 @@ const Footer = () => {
           </p>
           <p className="text-center md:text-right text-cream/50 text-sm">
             {t('footer.madeBy')}{' '}
+            <span className="heart-breathe">♥</span>{' '}
+            {t('footer.madeByBy')}{' '}
             <a
               href="https://www.smartflow-automations.com"
               target="_blank"
