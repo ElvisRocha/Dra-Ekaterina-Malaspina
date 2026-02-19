@@ -63,7 +63,7 @@ const ContactContent = () => {
   };
 
   // TODO: Replace with real clinic phone number
-  const whatsappNumber = '506XXXXXXXX';
+  const whatsappNumber = '50687094181';
   const whatsappLink = `https://wa.me/${whatsappNumber}`;
 
   return (
@@ -220,8 +220,7 @@ const ContactContent = () => {
                     </h3>
                     {/* TODO: Replace with real clinic address */}
                     <p className="text-muted-foreground text-sm">
-                      [Dirección de la clínica]<br />
-                      San José, Costa Rica
+                      Av. 41, Provincia de Alajuela, Cd Quesada, Barrio San Roque, 21001
                     </p>
                   </div>
                 </div>
@@ -237,10 +236,10 @@ const ContactContent = () => {
                     </h3>
                     {/* TODO: Replace with real phone number */}
                     <a 
-                      href="tel:+506XXXXXXXX" 
+                      href="tel:+50687094181" 
                       className="text-primary hover:underline text-sm"
                     >
-                      +506 XXXX-XXXX
+                      +506 8709-4181
                     </a>
                   </div>
                 </div>
@@ -256,10 +255,10 @@ const ContactContent = () => {
                     </h3>
                     {/* TODO: Replace with real email */}
                     <a 
-                      href="mailto:contacto@clinicaesperanza.com" 
+                      href="mailto:ekamalaspina@hotmail.com" 
                       className="text-primary hover:underline text-sm"
                     >
-                      contacto@clinicaesperanza.com
+                      ekamalaspina@hotmail.com
                     </a>
                   </div>
                 </div>

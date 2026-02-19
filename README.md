@@ -139,6 +139,6 @@ Desarrollado por [SmartFlow Automations](https://www.smartflow-automations.com)
 
 ## Contacto
 
-- **Email**: info@clinicaesperanza.cr
-- **Dirección**: San José, Costa Rica
-- **Website**: https://clinicaesperanza.com
+- **Email**: ekamalaspina@hotmail.com
+- **Dirección**: Av. 41, Provincia de Alajuela, Cd Quesada, Barrio San Roque, 21001
+- **Website**: https://dra-ekaterina-gine.com

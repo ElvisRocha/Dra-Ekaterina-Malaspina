@@ -53,15 +53,15 @@ const Footer = () => {
             <ul className="space-y-3 text-cream/70 text-sm">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-coral-light" />
-                <span>+506 XXXX-XXXX</span>
+                <span>+506 8709-4181</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-coral-light" />
-                <span>info@clinicaesperanza.cr</span>
+                <span>ekamalaspina@hotmail.com</span>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-coral-light mt-0.5" />
-                <span>San José, Costa Rica</span>
+                <span>Av. 41, Provincia de Alajuela, Cd Quesada, Barrio San Roque, 21001</span>
               </li>
             </ul>
           </div>
