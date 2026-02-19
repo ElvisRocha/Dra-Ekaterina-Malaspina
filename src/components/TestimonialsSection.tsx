@@ -132,6 +132,8 @@ const TestimonialModal = ({
 }: TestimonialModalProps) => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const modalTouchStartX = useRef(0);
+  const modalTouchStartY = useRef(0);
 
   const testimonial = testimonialIndex !== null ? testimonials[testimonialIndex] : null;
 
@@ -163,6 +165,21 @@ const TestimonialModal = ({
     }
     return () => { document.body.style.overflow = ''; };
   }, [testimonial]);
+
+  // Swipe handlers for touch navigation
+  const handleModalTouchStart = useCallback((e: React.TouchEvent) => {
+    modalTouchStartX.current = e.touches[0].clientX;
+    modalTouchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleModalTouchEnd = useCallback((e: React.TouchEvent) => {
+    const deltaX = modalTouchStartX.current - e.changedTouches[0].clientX;
+    const deltaY = modalTouchStartY.current - e.changedTouches[0].clientY;
+    if (Math.abs(deltaX) > SWIPE_THRESHOLD && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX > 0) onNext();
+      else onPrev();
+    }
+  }, [onNext, onPrev]);
 
   if (!testimonial) return null;
 
@@ -207,6 +224,8 @@ const TestimonialModal = ({
       <div
         className="relative max-w-lg w-full max-h-[85vh] z-[55]"
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleModalTouchStart}
+        onTouchEnd={handleModalTouchEnd}
       >
         {/* Close button — outside AnimatePresence so it stays static */}
         <button
