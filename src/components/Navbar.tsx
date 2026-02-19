@@ -27,6 +27,7 @@ const Navbar = ({ onBookClick }: NavbarProps) => {
   const navLinks: NavLink[] = [
     { to: '/', labelEs: 'Inicio', labelEn: 'Home' },
     { sectionId: 'servicios', labelEs: 'Servicios', labelEn: 'Services' },
+    { sectionId: 'confia-en-nosotras', labelEs: 'Confía en nosotras', labelEn: 'Trust in us' },
     { to: '/galeria', labelEs: 'Galería', labelEn: 'Gallery' },
     { to: '/contacto', labelEs: 'Contacto', labelEn: 'Contact' },
   ];

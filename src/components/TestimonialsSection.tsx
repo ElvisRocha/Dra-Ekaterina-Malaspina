@@ -492,7 +492,7 @@ const TestimonialsSection = () => {
   // --- Render ---
 
   return (
-    <section className="py-24 bg-soft-gradient relative overflow-hidden">
+    <section id="confia-en-nosotras" className="py-24 bg-soft-gradient relative overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-1/2 left-0 w-40 h-40 bg-coral/10 rounded-full blur-3xl -translate-y-1/2" />
       <div className="absolute top-1/2 right-0 w-40 h-40 bg-magenta/10 rounded-full blur-3xl -translate-y-1/2" />
