@@ -300,6 +300,40 @@ const translations: Translations = {
     en: 'Book my consultation',
   },
 
+  // Pathology Lab Section
+  'pathology.question': {
+    es: '¿Sabes quién se encarga de procesar las citologías y biopsias que se toman en nuestro consultorio?',
+    en: 'Do you know who is responsible for processing the cytologies and biopsies taken at our office?',
+  },
+  'pathology.intro': {
+    es: 'Tomar las muestras es solo el primer paso.',
+    en: 'Taking the samples is just the first step.',
+  },
+  'pathology.message': {
+    es: 'Las citologías y biopsias son estudios fundamentales para tu salud. Pero tomar la muestra es solo el primer paso — es igual de importante que esas muestras sean analizadas por profesionales especializados. Un diagnóstico preciso depende de manos expertas en cada etapa del proceso.',
+    en: 'Cytologies and biopsies are fundamental studies for your health. But collecting the sample is just the first step — it is equally important that these samples are analyzed by specialized professionals. An accurate diagnosis depends on expert hands at every stage of the process.',
+  },
+  'pathology.collaboration': {
+    es: 'Por eso, la Dra. Ekaterina trabaja en conjunto con el laboratorio del Dr. Emmanuel González Solano.',
+    en: 'That\'s why Dr. Ekaterina works together with the laboratory of Dr. Emmanuel González Solano.',
+  },
+  'pathology.doctor.specialty': {
+    es: 'Médico especialista en Anatomía Patológica · Patólogo en Hospital Clínica Bíblica',
+    en: 'Specialist in Anatomical Pathology · Pathologist at Hospital Clínica Bíblica',
+  },
+  'pathology.doctor.bio': {
+    es: 'El Dr. Emmanuel González Solano es médico especialista en Anatomía Patológica y se desempeña como patólogo en el Hospital Clínica Bíblica. Cuenta con amplia experiencia en el análisis histopatológico y citológico aplicado a la investigación clínica, participando en estudios nacionales e internacionales de alto impacto científico. Es investigador asociado de la Agencia Costarricense de Investigación Biomédica (ACIB) y ha colaborado en proyectos multicéntricos liderados por la IARC/OMS, enfocados en el tamizaje del cáncer cervicouterino y otras patologías asociadas al VPH.',
+    en: 'Dr. Emmanuel González Solano is a specialist in Anatomical Pathology and serves as a pathologist at Hospital Clínica Bíblica. He has extensive experience in histopathological and cytological analysis applied to clinical research, participating in national and international studies of high scientific impact. He is an associate researcher at the Costa Rican Agency for Biomedical Research (ACIB) and has collaborated on multicenter projects led by IARC/WHO, focused on cervical cancer screening and other HPV-associated pathologies.',
+  },
+  'pathology.instagramLabel': {
+    es: 'Seguir en Instagram',
+    en: 'Follow on Instagram',
+  },
+  'pathology.trustLabel': {
+    es: 'Diagnóstico especializado de confianza',
+    en: 'Trusted specialized diagnosis',
+  },
+
   // About Me page
   'about.specialty': { es: 'Ginecóloga y Obstetra', en: 'Gynecologist and Obstetrician' },
   'about.quote': {
