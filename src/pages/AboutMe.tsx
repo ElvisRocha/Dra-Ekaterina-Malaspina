@@ -234,9 +234,6 @@ const AboutMeContent = () => {
               <img src={IsotipoImg} alt="" className="h-40 w-auto brightness-0 invert opacity-90" />
               <div className="h-px w-16 bg-gradient-to-l from-transparent to-white/50" />
             </div>
-
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-white mb-8 max-w-3xl mx-auto">
-              ¿Lista para comenzar tu cuidado con una especialista que te acompaña en cada etapa?
             <h2 className="font-display text-3xl md:text-4xl text-primary-foreground mb-8 leading-tight">
               {t('about.ctaHeading')}
             </h2>
