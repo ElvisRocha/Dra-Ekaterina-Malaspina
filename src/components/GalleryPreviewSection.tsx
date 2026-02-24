@@ -313,7 +313,7 @@ const GalleryPreviewSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-foreground/90 flex flex-col items-center justify-center gap-4 p-4"
+            className="fixed inset-0 z-50 bg-foreground/90 flex flex-col items-center justify-center gap-6 p-4"
             onClick={closeLightbox}
             onTouchStart={handleLightboxTouchStart}
             onTouchEnd={handleLightboxTouchEnd}
@@ -342,34 +342,40 @@ const GalleryPreviewSection = () => {
               <ChevronRight className="w-10 h-10" />
             </button>
 
-            {/* Image */}
-            <motion.img
-              key={lightboxIndex}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              src={featuredCards[lightboxIndex].src}
-              alt={featuredCards[lightboxIndex].alt}
-              className="max-w-full max-h-[58vh] object-contain rounded-lg"
+            {/* Image with caption overlay */}
+            <div
+              className="relative rounded-lg overflow-hidden"
               onClick={(e) => e.stopPropagation()}
-            />
+            >
+              <motion.img
+                key={lightboxIndex}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                src={featuredCards[lightboxIndex].src}
+                alt={featuredCards[lightboxIndex].alt}
+                className="max-w-full max-h-[72vh] object-contain block"
+              />
+              {/* Caption — semi-transparent gradient footer inside the image */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`desc-${lightboxIndex}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="absolute bottom-0 left-0 right-0"
+                >
+                  <div className="bg-gradient-to-t from-black/80 via-black/50 to-transparent px-5 pb-4 pt-12">
+                    <p className="text-white text-sm text-center leading-relaxed drop-shadow-sm">
+                      {featuredCards[lightboxIndex].description}
+                    </p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
-            {/* Description — fades when navigating */}
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={`desc-${lightboxIndex}`}
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.2 }}
-                className="text-background/80 text-sm text-center leading-relaxed max-w-xs md:max-w-md px-6"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {featuredCards[lightboxIndex].description}
-              </motion.p>
-            </AnimatePresence>
-
-            {/* "Ver toda la galería" — replaces the X / Y counter */}
+            {/* "Ver toda la galería" */}
             <Link
               to="/galeria"
               className="btn-gradient"
