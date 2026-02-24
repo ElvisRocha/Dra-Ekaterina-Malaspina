@@ -7,6 +7,7 @@ import WhyChooseUs from '@/components/WhyChooseUs';
 import ServicesSection from '@/components/ServicesSection';
 import GalleryPreviewSection from '@/components/GalleryPreviewSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
+import PathologyLabSection from '@/components/PathologyLabSection';
 import FAQ from '@/components/FAQ';
 import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
@@ -47,6 +48,7 @@ const IndexContent = () => {
       <WhyChooseUs onBookClick={handleBookClick} />
       <ServicesSection onBookService={handleBookService} />
       <GalleryPreviewSection />
+      <PathologyLabSection />
       <TestimonialsSection />
       <FAQ onBookClick={handleBookClick} />
       <FinalCTA onBookClick={handleBookClick} />
