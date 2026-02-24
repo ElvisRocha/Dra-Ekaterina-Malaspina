@@ -84,4 +84,11 @@ export const testimonials: Testimonial[] = [
     textEn: 'I am incredibly grateful because when I was referred to you at 14 weeks (the worst two weeks of my life) because my baby had a birth defect, at 16 weeks you gave me my baby\'s diagnosis (gastroschisis). Your professionalism, dedication, and confidence gave me so much peace and strength throughout the process. 🩵✨ I appreciate every explanation and timely decision, for caring for me and preparing me to welcome my little one. I will always remember you with so much love and admiration. 🙏',
     rating: 5,
   },
+  {
+    id: 12,
+    name: 'Laura',
+    textEs: 'Un profesional excepcional, con una calidad humana admirable. Siempre dispuesto a acompañar, escuchar y brindar tranquilidad en momentos importantes. Eternamente agradecida.',
+    textEn: 'An exceptional professional with admirable character. Always willing to offer support, a listening ear, and reassurance during important moments. Eternally grateful.',
+    rating: 5,
+  },
 ];
