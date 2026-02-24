@@ -6,7 +6,6 @@ import IsotipoImg from '@/assets/Isotipo.png';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import EkaterinaImg from '@/assets/ekaterina.jpeg';
 
 // ─── Photo Placeholder ────────────────────────────────────────────────────────
 const PhotoPlaceholder = ({ className = '' }: { className?: string }) => (
@@ -84,7 +83,7 @@ const AboutMeContent = () => {
               className="flex-shrink-0"
             >
               <div className="w-52 h-52 md:w-64 md:h-64 rounded-full overflow-hidden shadow-lg border-4 border-white">
-                <img src={EkaterinaImg} alt="Dra. Ekaterina Malaspina" className="w-full h-full object-cover" />
+                <img src="https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1771953299/ekaterina_yxeoxk.jpg" alt="Dra. Ekaterina Malaspina" className="w-full h-full object-cover" />
               </div>
             </motion.div>
 

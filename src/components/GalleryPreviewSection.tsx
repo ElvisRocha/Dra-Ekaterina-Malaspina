@@ -8,8 +8,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const featuredCards = [
   {
     id: 1,
-    src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1770786745/atencion_en_camilla_f5gwim.jpg',
-    alt: 'Atención en camilla',
+    src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1771953299/ekaterina_yxeoxk.jpg',
+    alt: 'Dra. Ekaterina Malaspina',
     description: 'Atención con equipo de última tecnología 3D y 4D, para que experimentes el realismo de ver a tu bebé como nunca antes. Te ofrecemos imágenes detalladas con una claridad excepcional en un ambiente cálido y profesional.',
   },
   {
