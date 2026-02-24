@@ -1,19 +1,39 @@
 
 
-## Adaptar la foto de Ekaterina al circulo en "Acerca de Mi"
+## Internacionalizar la pagina "Acerca de Mi"
 
-Actualmente la imagen se muestra con `h-40 w-auto` dentro de un contenedor circular con borde punteado, lo que hace que no llene el circulo y no se vea profesional.
+Todos los textos de la pagina estan escritos directamente en espanol. Se necesita agregar las traducciones al sistema de idiomas existente (`LanguageContext`) y usar la funcion `t()` o condicionales `language === 'es'` para que respondan al toggle.
 
-### Cambios en `src/pages/AboutMe.tsx`
+### Textos a traducir
 
-1. **Hacer que la imagen llene completamente el circulo**: Reemplazar las clases de la imagen para usar `object-cover` y llenar todo el contenedor circular.
+**Hero:**
+- "Ginecologa y Obstetra" / "Gynecologist and Obstetrician"
+- Cita (blockquote) con version en ingles
 
-2. **Eliminar el borde punteado placeholder**: Cambiar el estilo del contenedor de "placeholder" a un contenedor profesional con sombra y overflow hidden.
+**Seccion "Su historia" / "Her story":**
+- Titulo de seccion
+- 4 bloques narrativos (titulos + parrafos) con versiones en ingles
 
-**Cambio concreto en el contenedor del hero:**
+**Seccion "Fuera del consultorio" / "Outside the office":**
+- Titulo de seccion
+- Parrafo descriptivo
+- Labels de hobbies (4 items)
 
-- Contenedor circular: Remover `bg-secondary/30 border-2 border-dashed border-primary/30 flex flex-col items-center justify-center` y usar `overflow-hidden shadow-lg border-4 border-white`.
-- Imagen: Cambiar `h-40 w-auto mb-1` a `w-full h-full object-cover` para que llene todo el circulo.
+**CTA final:**
+- Texto del heading
+- Boton (ya funciona)
 
-El resultado sera una foto circular profesional con sombra suave, sin bordes punteados.
+### Cambios tecnicos
+
+**1. `src/contexts/LanguageContext.tsx`** - Agregar ~25 nuevas claves de traduccion:
+- `about.specialty`, `about.quote`
+- `about.storyTitle`, `about.story1.title`, `about.story1.p1`, `about.story2.title`, `about.story2.p1`, `about.story2.p2`, `about.story3.title`, `about.story3.p1`, `about.story3.p2`, `about.story4.title`, `about.story4.p1`, `about.story4.p2`, `about.story4.p3`
+- `about.outsideTitle`, `about.outsideDesc`
+- `about.hobby1` a `about.hobby4`
+- `about.ctaHeading`
+
+**2. `src/pages/AboutMe.tsx`** - Reemplazar todos los textos hardcoded:
+- Mover los datos de `storyBlocks` y `hobbies` dentro del componente para que puedan usar `t()`
+- Reemplazar cada string espanol con llamadas a `t('about.xxx')`
+- Mantener la estructura visual y animaciones sin cambios
 
