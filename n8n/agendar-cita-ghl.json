@@ -30,7 +30,7 @@
     },
     {
       "parameters": {
-        "method": "POST",
+        "method": "GET",
         "url": "https://services.leadconnectorhq.com/contacts/search/duplicate",
         "sendHeaders": true,
         "headerParameters": {
@@ -42,15 +42,11 @@
             {
               "name": "Version",
               "value": "2021-07-28"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json"
             }
           ]
         },
-        "sendBody": true,
-        "bodyParameters": {
+        "sendQuery": true,
+        "queryParameters": {
           "parameters": [
             {
               "name": "locationId",
@@ -61,7 +57,7 @@
               "value": "={{ $json.patient.email }}"
             },
             {
-              "name": "phone",
+              "name": "number",
               "value": "={{ $json.patient.phone }}"
             }
           ]
