@@ -161,7 +161,7 @@ const FirstTimeForm = ({ isOpen, onComplete, initialData }: FirstTimeFormProps) 
 
     const patientData = {
       ...finalData,
-      contactId: initialData.contactId,
+      contactId: initialData.contactId || localStorage.getItem('ghl_contact_id') || '',
       timestamp: new Date().toISOString(),
     };
 
