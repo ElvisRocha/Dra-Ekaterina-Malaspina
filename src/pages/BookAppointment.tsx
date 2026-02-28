@@ -183,7 +183,7 @@ const BookAppointmentContent = () => {
 
     // Read flag set during handleConfirm
     const contactExisted = localStorage.getItem('ghl_contact_existed') === 'true';
-    const storedContactId = localStorage.getItem('ghl_contact_id') ?? ghlContactId;
+    const storedContactId = localStorage.getItem('ghl_contact_id') || ghlContactId;
     setGhlContactId(storedContactId);
 
     if (contactExisted) {
