@@ -48,7 +48,7 @@ const App = () => (
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="pacientes" element={<PacientesList />} />
             <Route path="pacientes/:id" element={<PacienteDetalle />} />
-            <Route path="calendario" element={<div className="text-muted-foreground">Calendario — Iteración 6</div>} />
+            <Route path="calendario" element={<AdminCalendario />} />
             <Route path="configuracion" element={<div className="text-muted-foreground">Configuración — Próximamente</div>} />
           </Route>
 
