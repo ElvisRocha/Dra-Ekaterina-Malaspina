@@ -11,24 +11,28 @@ const featuredCards = [
     src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1771953299/ekaterina_yxeoxk.jpg',
     alt: 'Dra. Ekaterina Malaspina',
     description: 'Atención con equipo de última tecnología 3D y 4D, para que experimentes el realismo de ver a tu bebé como nunca antes. Te ofrecemos imágenes detalladas con una claridad excepcional en un ambiente cálido y profesional.',
+    descriptionEn: 'Care with state-of-the-art 3D and 4D technology, so you can experience the realism of seeing your baby like never before. We offer detailed images with exceptional clarity in a warm and professional environment.',
   },
   {
     id: 2,
     src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1771469858/ultrasonido3_jnws6f.jpg',
     alt: 'Ultrasonido 3D',
     description: 'Ultrasonidos realizados con calidad y esmero para que puedas disfrutar plenamente del vínculo con tu bebé. Cada sesión es un momento único, capturado con precisión y amor.',
+    descriptionEn: 'Ultrasounds performed with quality and care so you can fully enjoy the bond with your baby. Each session is a unique moment, captured with precision and love.',
   },
   {
     id: 3,
     src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1771898892/consultorio_gx8i9x.jpg',
     alt: 'Consultorio',
     description: 'Un lugar seguro, confiable y con todas las comodidades para que te sientas como en casa. Nuestro consultorio está diseñado pensando en tu bienestar y tranquilidad durante cada visita.',
+    descriptionEn: 'A safe, welcoming space with every comfort so you feel right at home. Our office is thoughtfully designed with your well-being and peace of mind at the heart of every visit.',
   },
   {
     id: 4,
     src: 'https://res.cloudinary.com/dcvipikha/image/upload/f_auto,q_auto/v1772221320/Mirena_in_situ_zng8pz.jpg',
-    alt: 'Mirena In Situ',
-    description: 'Mirena In Situ es un procedimiento que realizamos para verificar la correcta colocación del dispositivo intrauterino mediante ultrasonido, garantizando tu seguridad y bienestar.',
+    alt: 'Ultrasonido Ginecológico',
+    description: 'Ultrasonidos ginecológicos realizados con precisión y cuidado para evaluar útero y ovarios como parte de tu control ginecológico, brindándote la tranquilidad y confianza que mereces.',
+    descriptionEn: 'Gynecological ultrasounds performed with precision and care to accurately evaluate the uterus and ovaries as part of your routine checkup, giving you the peace of mind and confidence you deserve.',
   },
 ];
 
@@ -156,7 +160,7 @@ const GalleryPreviewSection = () => {
               <div className="relative bg-card px-4 py-4">
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-coral via-fuchsia to-magenta" />
                 <p className="text-foreground/70 text-sm leading-relaxed">
-                  {card.description}
+                  {language === 'es' ? card.description : card.descriptionEn}
                 </p>
               </div>
             </motion.div>
@@ -223,7 +227,7 @@ const GalleryPreviewSection = () => {
                 transition={{ duration: 0.2 }}
                 className="text-foreground/70 text-sm leading-relaxed"
               >
-                {featuredCards[carouselIndex].description}
+                {language === 'es' ? featuredCards[carouselIndex].description : featuredCards[carouselIndex].descriptionEn}
               </motion.p>
             </AnimatePresence>
           </div>
@@ -312,7 +316,7 @@ const GalleryPreviewSection = () => {
                 >
                   <div className="bg-gradient-to-t from-black/80 via-black/50 to-transparent px-5 pb-4 pt-12">
                     <p className="text-white text-sm text-center leading-relaxed drop-shadow-sm">
-                      {featuredCards[lightboxIndex].description}
+                      {language === 'es' ? featuredCards[lightboxIndex].description : featuredCards[lightboxIndex].descriptionEn}
                     </p>
                   </div>
                 </motion.div>
