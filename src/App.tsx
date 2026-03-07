@@ -14,6 +14,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import PacientesList from "./pages/admin/PacientesList";
 import PacienteDetalle from "./pages/admin/PacienteDetalle";
+import AdminCalendario from "./pages/admin/AdminCalendario";
 import AdminLayout from "./components/admin/AdminLayout";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 
