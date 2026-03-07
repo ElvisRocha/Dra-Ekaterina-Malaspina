@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import PacientesList from "./pages/admin/PacientesList";
 import PacienteDetalle from "./pages/admin/PacienteDetalle";
 import AdminCalendario from "./pages/admin/AdminCalendario";
+import AdminConfiguracion from "./pages/admin/AdminConfiguracion";
 import AdminLayout from "./components/admin/AdminLayout";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 
@@ -49,7 +50,7 @@ const App = () => (
             <Route path="pacientes" element={<PacientesList />} />
             <Route path="pacientes/:id" element={<PacienteDetalle />} />
             <Route path="calendario" element={<AdminCalendario />} />
-            <Route path="configuracion" element={<div className="text-muted-foreground">Configuración — Próximamente</div>} />
+            <Route path="configuracion" element={<AdminConfiguracion />} />
           </Route>
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
