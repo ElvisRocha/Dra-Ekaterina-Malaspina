@@ -48,8 +48,8 @@ const IndexContent = () => {
       <WhyChooseUs onBookClick={handleBookClick} />
       <ServicesSection onBookService={handleBookService} />
       <GalleryPreviewSection />
-      <PathologyLabSection />
       <TestimonialsSection />
+      <PathologyLabSection />
       <FAQ onBookClick={handleBookClick} />
       <FinalCTA onBookClick={handleBookClick} />
       <Footer />
